@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
 import functools
 import logging
 import multiprocessing
@@ -45,18 +46,17 @@ from disco.data.substructure_perms import get_substructure_perms
 
 logger = logging.getLogger(__name__)
 
-COMPONENTS_FILE = hf_hub_download(
+COMPONENTS_FILE = os.environ.get("DISCO_COMPONENTS_CIF") or hf_hub_download(
     repo_id="DISCO-Design/DISCO",
     filename="components.v20240608.cif",
 )
 
-RKDIT_MOL_PKL = Path(
-    hf_hub_download(
+RDKIT_MOL_PKL = Path(
+    os.environ.get("DISCO_COMPONENTS_PKL") or hf_hub_download(
         repo_id="DISCO-Design/DISCO",
         filename="components.v20240608.cif.rdkit_mol.pkl",
     )
 )
-
 
 @functools.lru_cache
 def biotite_load_ccd_cif() -> pdbx.CIFFile:
@@ -248,7 +248,7 @@ def get_component_rdkit_mol(ccd_code: str) -> Chem.Mol | None:
     if _ccd_rdkit_mols:
         return _ccd_rdkit_mols.get(ccd_code, None)
 
-    rdkit_mol_pkl = RKDIT_MOL_PKL
+    rdkit_mol_pkl = RDKIT_MOL_PKL
     if rdkit_mol_pkl.exists():
         with open(rdkit_mol_pkl, "rb") as f:
             _ccd_rdkit_mols = pickle.load(f)
