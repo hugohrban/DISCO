@@ -247,7 +247,8 @@ MODEL_REGISTRY = {
     "esm2_3B": "facebook/esm2_t36_3B_UR50D",
     "esm2_15B": "facebook/esm2_t48_15B_UR50D",
     "dplm_150M": "airkingbd/dplm_150m",
-    "dplm_650M": "airkingbd/dplm_650m",
+    # Try to load the model from a local path before downloading from HF 
+    "dplm_650M": os.environ.get("DISCO_DPLM_650M_PATH", "airkingbd/dplm_650m"),
     "dplm_3B": "airkingbd/dplm_3b",
     "evoflow_650M": "zhangzhi/EvoFlow-650M-context-3070",
     "evoflow_650M_Base": "zhangzhi/EvoFlow-650M",
